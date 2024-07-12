@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin\RequestVehicle;
 
+use Illuminate\Http\Request;
+use App\Models\RequestVehicle;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Interfaces\RequestVehicle\RequestVehicleInterface;
-use App\Models\RequestVehicle;
-use Illuminate\Http\Request;
+use App\Models\RequestDetails;
 
 class RequestVehicleController extends Controller
 {
@@ -22,7 +24,7 @@ class RequestVehicleController extends Controller
     public function index() {
 
         $title = 'Request Vehicle';
-        $data = $this->vehicleRepository->getVehicle()
+        $data = $this->vehicleRepository->getAll()
         ->paginate($this->perPage);
         $perPage = $this->perPage;
         $badge = $this->badge();
@@ -30,7 +32,7 @@ class RequestVehicleController extends Controller
         $findDivision = $this->division();
 
 
-        // return $findDivison;
+        // return $data;
 
         return view('admin.master.vehicle.index', compact(
             'title',
@@ -78,12 +80,17 @@ class RequestVehicleController extends Controller
         $data = RequestVehicle::select([
             'request_vehicle.id',
             'request_vehicle.email',
-            'request_vehicle.request_date'
+            'request_vehicle.request_date',
+            'request_vehicle.maximum_person',
+            'request_vehicle.division',
+            'request_vehicle.direction',
+            'request_vehicle.necessity',
+            'request_vehicle.status',
+
         ])
         ->where('request_vehicle.id', $requestVehicle->id)
         ->first();
 
-        // return $data;
 
         return response()->json([
             'data' => $data
@@ -92,9 +99,89 @@ class RequestVehicleController extends Controller
     }
 
 
-    public function update(RequestVehicle $requestVehicle) {
+    public function update(RequestVehicle $requestVehicle, Request $request) {
+        
+        $attr = $request->all();
 
-        // 
+        try {
+
+            $findDetails['request_vehicle_id'] = RequestDetails::find($requestVehicle->id);
+
+            $requestVehicle->update([
+                'email' => $attr['email'],
+                'request_date' => $attr['request_date'],
+                'maximum_person' => $attr['maximum_person'],
+                'division' => $attr['division'],
+                'direction' => $attr['direction'],
+                'necessity' => $attr['necessity'],
+                'status' => $attr['status'],
+            ]);
+
+
+
+            $updatedRequestVehicle = DB::table('request_details')
+                    ->where('id', $requestVehicle->id)
+                    ->update([
+                        'noted' => $request->noted,
+                        'request_date' => $request->request_date,
+                        'status' => $request->status
+                    ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status_code' => 200,
+                'status' => 'success',
+                'message' => 'Successfully Updated Data',
+                'url' => route('request-vehicle.index')
+            ]);
+
+
+
+        } catch (\Exception $e) {
+            
+            DB::rollBack();
+
+            return response()->json([
+                'status_code' => 400,
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+
+
+        }
     }
+
+
+    public function remove(RequestVehicle $requestVehicle, Request $request)
+    {
+        try {
+
+            $findVehicle = RequestVehicle::find($requestVehicle->id);
+
+
+            $requestVehicle->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status_code' => 200,
+                'status' => 'success',
+                'message' => 'Remove Data Successfully',
+                'url' => route('request-vehicle.index')
+            ]);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'status_code' => 400,
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
 
 }

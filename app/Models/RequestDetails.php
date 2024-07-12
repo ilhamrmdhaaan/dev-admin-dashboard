@@ -12,6 +12,16 @@ class RequestDetails extends Model
     protected $table = 'request_details';
 
     protected $fillable = [
-        'request_vehicle_id', 'name', 'request_date', 'noted', 'nopol', 'driver', 'status'
+        'request_vehicle_id', 'name', 'request_date', 'noted', 'nopol', 'driver'
     ];
+
+    // Specify the primary key if it's not 'id'
+    protected $primaryKey = 'id';
+
+    // Define the inverse relationship to Vehicle
+    public function vehicle()
+    {
+        return $this->belongsTo(RequestVehicle::class, 'id');
+    }
+
 }

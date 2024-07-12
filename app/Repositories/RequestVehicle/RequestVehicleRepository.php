@@ -19,9 +19,10 @@ class RequestVehicleRepository implements RequestVehicleInterface
     public function getAll() {
 
         $getAll = DB::table('request_vehicle as v')
-            ->join('request_details as d', 'v.id', '=' ,'d.request_vehicle_id')
+            ->leftJoin('request_details as d', 'v.id', '=' ,'d.request_vehicle_id')
             ->selectRaw('
-                    v.id as r_vehicle_id, d.name
+                    v.id as r_vehicle_id, d.id as r_details_id, 
+                    d.request_vehicle_id, v.request_date, d.name, v.email, v.maximum_person, v.division, v.direction, v.necessity, v.status, d.noted
             ')
             ->orderBy('v.created_at', 'asc');
 

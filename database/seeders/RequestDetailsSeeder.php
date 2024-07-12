@@ -26,7 +26,7 @@ class RequestDetailsSeeder extends Seeder
                 'noted' => null,
                 'nopol' => $faker->numerify(),
                 'driver' => $faker->name(),
-                'status' => $faker->randomElement(['approved', 'pending', 'cancel'])
+                'status' => $faker->randomElement(['Approved', 'Pending', 'Cancel'])
                 ]);
             }
         }

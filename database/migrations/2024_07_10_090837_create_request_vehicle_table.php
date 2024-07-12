@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('division')->nullable();
             $table->string('direction')->nullable();
             $table->text('necessity')->nullable();
-            $table->char('status')->default('pending')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

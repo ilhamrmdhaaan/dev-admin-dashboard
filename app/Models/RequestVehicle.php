@@ -12,11 +12,6 @@ class RequestVehicle extends Model
     protected $table = 'request_vehicle';
 
     protected $fillable = [
-        'email', 'request_date', 'maximum_person', 'division', 'direction', 'necessity'
+        'email', 'request_date', 'maximum_person', 'division', 'direction', 'status', 'necessity'
     ];
-
-    public function requestVehicle() {
-        
-        return $this->hasOne(RequestDetails::class);
-    }
 }

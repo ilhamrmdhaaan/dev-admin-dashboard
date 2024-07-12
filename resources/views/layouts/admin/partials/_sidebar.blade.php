@@ -50,6 +50,17 @@
                             </a>
                         </li>
 
+                        <li class="nk-menu-item">
+                            <a href="{{ route('request-details.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-clipboad-check-fill"></em>
+                                </span>
+                                <span class="nk-menu-text">
+                                    Request Details
+                                </span>
+                            </a>
+                        </li>
+
                         {{-- <li class="nk-menu-item">
                             <a href="#" class="nk-menu-link">
                                 <span class="nk-menu-icon">

@@ -159,42 +159,42 @@
 
 
     // Simpan pasien data otc
-        const submitForm = (originalForm) => {
+    const submitForm = (originalForm) => {
             event.preventDefault();
-            $(originalForm).find('.form-control').removeClass('error');
-            $(".invalid").remove();
             $.post({
                     url: $(originalForm).attr('action'),
-                    data: $(originalForm).serialize(),
+                    data: new FormData(originalForm),
                     beforeSend: function() {
                         $(originalForm).find('.tombol-simpan').attr('disabled', true);
                         $(originalForm).find('.text-simpan').text('Menyimpan . . .');
                         $(originalForm).find('.loading-simpan').removeClass('d-none');
                     },
+                    dataType: 'json',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
                     complete: function() {
                         $(originalForm).find('.loading-simpan').addClass('d-none');
                         $(originalForm).find('.text-simpan').text('Simpan');
                         $(originalForm).find('.tombol-simpan').attr('disabled', false);
-
                     }
                 })
-                .done(response => {
-                    $(modal).modal('hide');
-                    // $(modalSub).modal('hide');
-                    $(originalForm).find('.tombol-simpan').attr('disabled', true);
+                .done((response) => {
                     alertSuccess(response.message);
-                    setInterval(() => {
-                        window.location.reload();
-                    }, 1500);
+                    // $(modal).modal('hide');
+                    $(modalUpdated).modal('hide');
+                    pindahHalaman(reloadHalaman(), 1000);
+                    $(originalForm).find('.tombol-simpan').attr('disabled', true);
                 })
-                .fail(errors => {
+                .fail((errors) => {
                     if (errors.status === 422) {
                         loopErrors(errors.responseJSON.errors);
                         return;
                     }
                     alertError();
-                })
-            }
+                });
+        }
+
 
 
         const showModalAllInOne = async (urlModal, urlStore) => {
@@ -220,7 +220,7 @@
         }
 
 
-        const showModalUpdated = (url) => {
+        const showModalUpdated = (url, urlUpdate) => {
             event.preventDefault()
             $.get(url)
             .done(response => {
@@ -238,50 +238,33 @@
 
         }
 
-        function simpanOtc(originalForm) {
+       
+        // Remove Request
+        const removeRequest= (url) => {
             event.preventDefault();
-            $(originalForm).find('.form-control').removeClass('error');
-            $(".invalid").remove();
-            $.post({
-                    url: $(originalForm).attr('action'),
-                    data: $(originalForm).serialize(),
-                    beforeSend: function() {
-                        $(originalForm).find('.tombol-simpan').attr('disabled', true);
-                        $(originalForm).find('.text-simpan').text('Menyimpan . . .');
-                        $(originalForm).find('.loading-simpan').removeClass('d-none');
-                    },
-                    complete: function() {
-                        $(originalForm).find('.loading-simpan').addClass('d-none');
-                        $(originalForm).find('.text-simpan').text('Simpan');
-                        $(originalForm).find('.tombol-simpan').attr('disabled', false);
-                    }
-                })
-                .done(response => {
-                    alertSuccess(response.message);
-                    pindahHalaman(response.url, 1500);
-                })
-                .fail(errors => {
-                    if (errors.status === 422) {
-                        loopErrors(errors.responseJSON.errors);
-                        return;
-                    }
-                    alertError();
-                })
-        }
-
-        // Hapus obat otc
-        const removePasienOtc = (url) => {
-            event.preventDefault();
-            $.post({
+            Swal.fire({
+                title: "Apakah anda yakin menghapus data ini?",
+                text: "Data yang sudah dihapus tidak dapat dikembalikan lagi!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, Hapus!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post({
                     url: url,
                     data: {
                         _method: "DELETE",
                     },
                 })
-                .done(response => {
-                    alertSuccess(response.message)
-                    pindahHalaman(response.url, 1500)
-                })
+                    .done(response => {
+                        alertSuccess(response.message)
+                        pindahHalaman(response.url, 1500)
+                    })
+                }
+            }) 
         }
+
 </script>
 @endpush

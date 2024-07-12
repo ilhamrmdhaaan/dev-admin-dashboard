@@ -45,4 +45,17 @@ class Controller extends BaseController
             ->select('id', 'name')
             ->get();
     }
+
+    public function findVehicle(int $vehicleId) {
+
+        $vehicle = DB::table('request_vehicle')
+                ->selectRaw('
+                    id, email
+                ')
+                ->where('id', $vehicleId)
+                ->first();
+
+        return $vehicle;
+
+    }
 }

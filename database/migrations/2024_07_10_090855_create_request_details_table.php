@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('request_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('request_vehicle_id')->references('id')->on('request_vehicle')
-            ->cascadeOnUpdate()
-            ->restrictOnDelete();
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
+            // $table->unsignedBigInteger('request_vehicle_id')->nullable();
             $table->date('request_date')->nullable();
-            $table->char('name')->nullable();
+            $table->string('name')->nullable();
             $table->string('noted')->nullable();
             $table->string('nopol')->nullable();
-            $table->char('driver')->nullable();
-            $table->char('status')->nullable();
+            $table->string('driver')->nullable();
+            $table->string('status')->default('Pending')->nullable();
             $table->timestamps();
         });
     }

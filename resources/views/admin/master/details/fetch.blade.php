@@ -1,17 +1,13 @@
 <div class="nk-tb-list is-separate mb-3">
     <div class="nk-tb-item nk-tb-head">
         <div class="nk-tb-col"><span class="sub-text">No</span></div>
-        <div class="nk-tb-col"><span class="sub-text">Email</span></div>
         <div class="nk-tb-col"><span class="sub-text">Request Date</span></div>
-        <div class="nk-tb-col"><span class="sub-text">Maximum Person(Nama)</span></div>
-        <div class="nk-tb-col"><span class="sub-text">Division</span></div>
-        <div class="nk-tb-col"><span class="sub-text">Direction(Tujuan)</span></div>
-        <div class="nk-tb-col"><span class="sub-text">Necessity(Keperluan)</span></div>
-
+        <div class="nk-tb-col"><span class="sub-text">Name</span></div>
         <div class="nk-tb-col"><span class="sub-text">Noted</span></div>
-
+        <div class="nk-tb-col"><span class="sub-text">Nopol</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Driver</span></div>
         <div class="nk-tb-col"><span class="sub-text">Status</span></div>
-
+    
         <div class="nk-tb-col"><span class="sub-text">Opsi</span></div>
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
@@ -27,50 +23,48 @@
         </div>
 
         <div class="nk-tb-col tb-col-md">
-            <span class="tb-lead text-capitalize">
-                {!! $item->email !!}
+            <span class="tb-lead">
+                {!! tanggalSekarang($item->request_date) !!}
+            </span>
+        </div>
+        <div class="nk-tb-col">
+            <span class="tb-lead">
+                {!! $item->name !!}
+            </span>
+        </div>
+        <div class="nk-tb-col tb-col-md">
+            <span class="tb-lead">
+                {!! $item->noted !!}
             </span>
         </div>
 
         <div class="nk-tb-col tb-col-md">
-            <span class="tb-lead text-capitalize">{!! date('Y-m-d',strtotime( $item->request_date))!!}</span>
+            <span class="tb-lead text-capitalize">
+                {!! ($item->nopol) !!}
+            </span>
         </div>
 
         <div class="nk-tb-col tb-col-md">
-            <span class="tb-lead text-capitalize">{!!  $item->maximum_person !!}</span>
+            <span class="tb-lead text-capitalize">
+                {!! ($item->driver) !!}
+            </span>
         </div>
 
         <div class="nk-tb-col">
-            <span class="tb-lead text-capitalize">{!!  $item->division !!}</span>
-        </div>
-
-        <div class="nk-tb-col">
-            <span class="tb-lead text-capitalize">{!!  $item->direction !!}</span>
-        </div>
-
-        <div class="nk-tb-col">
-            <span class="tb-lead text-capitalize">{!!  $item->necessity !!}</span>
-        </div>
-
-        <div class="nk-tb-col">
-            <span class="tb-lead text-capitalize"> {!!  $item->noted !!} </span>
-        </div>
-
-        <div class="nk-tb-col tb-col-md">
             <span class="badge badge-dim badge 
             {{ $item->status == 'Approved' ? 'badge-success' : ($item->status == 'Pending' ? 'badge-warning' : ($item->status == 'Cancel' ? 'badge-danger' : '')) }} ">
                 {!! $item->status !!}
             </span>
         </div>
 
-        {{-- <div class="nk-tb-col">
-            <span
-                class="text-capitalize badge badge-dim badge @if($item->status_pemeriksaan == 'selesai') badge-success @elseif($item->status_pemeriksaan == 'belum selesai') badge-danger @endif">{!!
-                $item->status_pemeriksaan !!}</span>
-        </div> --}}
-
         <div class="nk-tb-col">
-            <span></span>
+            <span class="tb-lead text-capitalize">
+                {{-- {!! date('d-F-Y, h:i', strtotime($item->tanggal_pembelian)) !!} --}}
+                {{-- {!! tanggal($item->tanggal_pembelian) !!} --}}
+            </span>
+        </div>
+
+        <div class="nk-tb-col tb-col-md">
         </div>
 
         <div class="nk-tb-col">
@@ -80,13 +74,6 @@
         <div class="nk-tb-col">
             <span></span>
         </div>
-
-        <div class="nk-tb-col">
-            <span></span>
-        </div>
-
-
-
 
         <div class="nk-tb-col nk-tb-col-tools">
             <ul class="nk-tb-actions gx-2">
@@ -97,32 +84,25 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
                                 <li>
-                                    <a href="#" onclick="showModalUpdated(`{{ route('request-vehicle.show', $item->r_vehicle_id) }}`, `{{ route('request-vehicle.update', $item->r_vehicle_id) }}`)">
+                                    <a href="#"
+                                        onclick="showModalUpdateBarang()">
                                         <em class="icon ni ni-update"></em>
-                                        <span>Update Data</span>
+                                        <span>Updated</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#"
-                                        onclick="removeRequest(` {{ route('request-vehicle.remove', $item->r_vehicle_id) }} `)">
+                                        onclick="destroyBarang()">
                                         <em class="icon ni ni-trash"></em>
-                                        <span>Hapus Data</span>
+                                        <span>Remove</span>
                                     </a>
                                 </li>
-                                {{-- <li>
-                                    <a target="_blank"
-                                        href="#">
-                                        <em class="icon ni ni-printer-fill"></em>
-                                        <span>Print</span>
-                                    </a>
-                                </li> --}}
                             </ul>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
-
     </div>
     @empty
     <div class="nk-tb-item">
@@ -130,8 +110,7 @@
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
-        <div class="nk-tb-col"></div>
-        <div class="nk-tb-col tb-col-lg tb-col-md">
+        <div class="nk-tb-col">
             <h4 class="text-center">Data Is Empty</h4>
         </div>
         <div class="nk-tb-col"></div>
