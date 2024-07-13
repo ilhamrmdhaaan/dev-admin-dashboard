@@ -1,4 +1,4 @@
-<div class="modal fade zoom modal-update">
+<div class="modal fade zoom modal-create">
     <div class="modal-dialog modal-xl modal-dialog-top">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,23 +10,13 @@
             <div class="modal-body">
                 <form method="post">
                     @csrf
-                    @method('put')
 
                     <div class="row g-gs">
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label class="form-label" for="">Email</label>
                                 <div class="form-control-wrap">
                                     <input type="email" class="form-control" name="email" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label" for="">Name</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" name="name" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -38,8 +28,7 @@
                                     <div class="form-icon form-icon-left">
                                         <em class="icon ni ni-calendar"></em>
                                     </div>
-                                    <input type="text" class="form-control date-picker" name="request_date"
-                                        data-date-format="yyyy-mm-dd">
+                                    <input type="text" class="form-control date-picker" name="request_date" data-date-format="yyyy-mm-dd">
                                 </div>
                             </div>
                         </div>
@@ -57,13 +46,12 @@
                             <div class="form-group">
                                 <label class="form-label">Division</label>
                                 <div class="form-control-wrap">
-                                    <select class="form-select" name="division" style="position:absolute;"
-                                        data-placeholder="Chose Division">
+                                    <select class="form-select" name="division" style="position:absolute;" data-placeholder="Chose Division">
                                         <option label="Chose Data" disabled selected value=""></option>
-                                    @foreach ($findDivision as $item)
+                                        @foreach ($findDivision as $item)
                                         <option value="{{ $item->name }}">{{ $item->name }}
                                         </option>
-                                    @endforeach
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -92,14 +80,13 @@
                             <div class="form-group">
                                 <label class="form-label">Chose Status</label>
                                 <div class="form-control-wrap">
-                                    <select class="form-select" name="status" style="position:absolute;"
-                                    data-placeholder="Chose Division">
-                                    <option label="Chose Status" disabled selected value=""></option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Cancel">Cancel</option>
-                                    </option>
-                                </select>
+                                    <select class="form-select" name="status" style="position:absolute;" data-placeholder="Chose Division">
+                                        <option label="Chose Status" disabled selected value=""></option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Cancel">Cancel</option>
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -119,8 +106,7 @@
 
                     <div class="col-lg-8 offset-5">
                         <div class="form-group my-5">
-                            <button type="submit" class="btn btn-lg btn-primary tombol-simpan"
-                                onclick="submitForm(this.form)">
+                            <button type="submit" class="btn btn-lg btn-primary tombol-simpan" onclick="submitForm(this.form)">
                                 Submit
                             </button>
                         </div>

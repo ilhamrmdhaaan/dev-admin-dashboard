@@ -17,10 +17,11 @@
 
                     {{-- Head --}}
                     <div class="nk-block-between mt-4">
+
                         <div class="nk-block-head-content">
-                            <a href="#" onclick="showModalCreate(`{{ route('request-vehicle.store') }}`)" class="btn btn-primary btn-md">
+                            <a href="#" onclick="#" class="btn btn-primary btn-md">
                                 <em class="icon ni ni-plus"></em>
-                                <span>Add Request</span>
+                                <span>Tambah Obat Pasien OTC</span>
                             </a>
                         </div>
 
@@ -30,7 +31,7 @@
                                 <div class="toggle-expand-content" data-content="more-options">
                                     <ul class="nk-block-tools g-3">
                                         <li>
-                                            <!-- {{-- <div class="drodown">
+                                            {{-- <div class="drodown">
                                                 <a href="#"
                                                     class="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white"
                                                     data-toggle="dropdown" aria-expanded="false">Filter Berdasarkan
@@ -62,7 +63,7 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div> --}} -->
+                                            </div> --}}
                                         </li>
                                         <li>
                                             <div class="form-control-wrap">
@@ -98,12 +99,9 @@
 
 
 @push('js')
-@include('admin.master.vehicle.partials._modal_create')
 @include('admin.master.vehicle.partials._modal_update')
-
 <script>
-    // const modalAllInOne = '.modal-all-in-one'
-    const modalCreate = '.modal-create'
+    const modalAllInOne = '.modal-all-in-one'
     const modalUpdated = '.modal-update'
 
     $(document).ready(function() {
@@ -158,7 +156,7 @@
 
 
 
-    // Submit Data Form
+    // Simpan pasien data otc
     const submitForm = (originalForm) => {
         event.preventDefault();
         $.post({
@@ -181,7 +179,7 @@
             })
             .done((response) => {
                 alertSuccess(response.message);
-                $(modalCreate).modal('hide');
+                // $(modal).modal('hide');
                 $(modalUpdated).modal('hide');
                 pindahHalaman(reloadHalaman(), 1000);
                 $(originalForm).find('.tombol-simpan').attr('disabled', true);
@@ -197,38 +195,29 @@
 
 
 
-    // const showModalAllInOne = async (urlModal, urlStore) => {
-    //     event.preventDefault()
-    //     $(`${modalAllInOne} .modal-dialog`).removeClass('modal-md')
-    //     $.get(urlModal)
-    //         .done(res => {
-    //             $(`${modalAllInOne} #loading-modal`).addClass('d-none')
-    //             $(`${modalAllInOne} .modal-dialog`).addClass('modal-xl')
-    //             $(modalAllInOne).modal('show')
-    //             $(`${modalAllInOne} .modal-body`).html(res.output)
-    //             $(`${modalAllInOne} form`).attr('action', urlStore)
-    //             if (res.method == 'put') {
-    //                 $(`${modalAllInOne} form [name=_method]`).val('put')
-    //             } else {
-    //                 $(`${modalAllInOne} form [name=_method]`).val('post')
-    //             }
-    //         })
-    //         .fail((errors) => {
-    //             $(`${modalAllInOne} #loading-modal`).removeClass('d-none')
-    //             alertError()
-    //         })
-    // }
-
-    // Show Modal Create
-    const showModalCreate = (urlStore) => {
+    const showModalAllInOne = async (urlModal, urlStore) => {
         event.preventDefault()
-        $(modalCreate).modal('show')
-        $('.modal-title').text('Form Add Request')
-        $(`${modalCreate} form`).attr('action', urlStore)
-        $(`${modalCreate} [name=_method]`).val('post')
+        $(`${modalAllInOne} .modal-dialog`).removeClass('modal-md')
+        $.get(urlModal)
+            .done(res => {
+                $(`${modalAllInOne} #loading-modal`).addClass('d-none')
+                $(`${modalAllInOne} .modal-dialog`).addClass('modal-xl')
+                $(modalAllInOne).modal('show')
+                $(`${modalAllInOne} .modal-body`).html(res.output)
+                $(`${modalAllInOne} form`).attr('action', urlStore)
+                if (res.method == 'put') {
+                    $(`${modalAllInOne} form [name=_method]`).val('put')
+                } else {
+                    $(`${modalAllInOne} form [name=_method]`).val('post')
+                }
+            })
+            .fail((errors) => {
+                $(`${modalAllInOne} #loading-modal`).removeClass('d-none')
+                alertError()
+            })
     }
 
-    // Show Modal Updated
+
     const showModalUpdated = (url, urlUpdate) => {
         event.preventDefault()
         $.get(url)

@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\Dashboard\DashboardInterface;
+use App\Repositories\Dashboard\DashboardRepository;
 use App\Interfaces\RequestDetails\RequestDetailsInterface;
 use App\Interfaces\RequestVehicle\RequestVehicleInterface;
 use App\Repositories\RequestDetails\RequestDetailsRepository;
@@ -24,7 +25,10 @@ class AdminServicesProvider extends ServiceProvider
             RequestDetailsInterface::class,
             RequestDetailsRepository::class
         );
-
+        $this->app->bind(
+            DashboardInterface::class,
+            DashboardRepository::class
+        );
     }
 
     /**

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('request_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('request_vehicle_id')->references('id')->on('request_vehicle')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
-            // $table->unsignedBigInteger('request_vehicle_id')->nullable();
+            $table->foreignId('request_vehicle_id')->constrained('request_vehicle')->onDelete('cascade');
+            // $table->foreignId('request_vehicle_id')->references('id')->on('request_vehicle')
+            //     ->cascadeOnUpdate()
+            //     ->restrictOnDelete();
             $table->date('request_date')->nullable();
             $table->string('name')->nullable();
             $table->string('noted')->nullable();
@@ -36,7 +36,5 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('request_details');
         Schema::enableForeignKeyConstraints();
-
-
     }
 };

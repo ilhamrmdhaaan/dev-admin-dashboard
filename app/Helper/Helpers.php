@@ -52,3 +52,13 @@ function tanggal($tanggal)
 
     return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 }
+
+
+function formatAngka(int $angka, bool $rp = false)
+{
+    if ($rp === true) {
+        return 'Rp. ' . number_format($angka, 0, ',', '.');
+    } else {
+        return number_format($angka, 0, ',', '.');
+    }
+}

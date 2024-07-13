@@ -23,5 +23,4 @@ class RequestDetails extends Model
     {
         return $this->belongsTo(RequestVehicle::class, 'id');
     }
-
 }

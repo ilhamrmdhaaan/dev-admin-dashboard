@@ -21,11 +21,12 @@ class RequestVehicleController extends Controller
     }
 
 
-    public function index() {
+    public function index()
+    {
 
         $title = 'Request Vehicle';
         $data = $this->vehicleRepository->getAll()
-        ->paginate($this->perPage);
+            ->paginate($this->perPage);
         $perPage = $this->perPage;
         $badge = $this->badge();
 
@@ -55,8 +56,8 @@ class RequestVehicleController extends Controller
                 ->when($q ?? false, function ($query) use ($q) {
                     return $query->where('v.id', 'like', '%' . $q . '%')
                         ->orWhere('v.email', 'like', '%' . $q . '%');
-                        // ->orWhere('v.nama', 'like', '%' . $q . '%')
-                        // ->orWhere('v.tanggal_lahir', 'like', '%' . $q . '%');
+                    // ->orWhere('v.nama', 'like', '%' . $q . '%')
+                    // ->orWhere('v.tanggal_lahir', 'like', '%' . $q . '%');
                 })
                 ->when($status ?? false, function ($query) use ($status) {
                     if ($status == 'semua') {
@@ -75,7 +76,8 @@ class RequestVehicleController extends Controller
     }
 
 
-    public function show(RequestVehicle $requestVehicle) {
+    public function show(RequestVehicle $requestVehicle)
+    {
 
         $data = RequestVehicle::select([
             'request_vehicle.id',
@@ -88,19 +90,65 @@ class RequestVehicleController extends Controller
             'request_vehicle.status',
 
         ])
-        ->where('request_vehicle.id', $requestVehicle->id)
-        ->first();
+            ->where('request_vehicle.id', $requestVehicle->id)
+            ->first();
 
 
         return response()->json([
             'data' => $data
         ], 200);
-
     }
 
 
-    public function update(RequestVehicle $requestVehicle, Request $request) {
-        
+    public function store(Request $request)
+    {
+        $attr = $request->all();
+
+        try {
+
+            $data = new RequestVehicle();
+            $data['email'] = $request->email;
+            $data['request_date'] = $request->request_date;
+            $data['maximum_person'] = $request->maximum_person;
+            $data['division'] = $request->division;
+            $data['direction'] = $request->direction;
+            $data['necessity'] = $request->necessity;
+            $data['status'] = $request->status;
+            $data->save();
+
+            // Data untuk tabel request_details
+            $requestDetailsData = RequestDetails::create([
+                'request_vehicle_id' => $data->id,
+                'request_date' => $request->request_date,
+                'noted' => $request->noted
+            ]);
+
+            // dd($requestDetailsData);
+
+            DB::commit();
+
+            return response()->json([
+                'status_code' => 200,
+                'status' => 'success',
+                'message' => 'Successfully Add Data',
+                'url' => route('request-vehicle.index')
+            ]);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'status_code' => 400,
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    public function update(RequestVehicle $requestVehicle, Request $request)
+    {
+
         $attr = $request->all();
 
         try {
@@ -120,12 +168,13 @@ class RequestVehicleController extends Controller
 
 
             $updatedRequestVehicle = DB::table('request_details')
-                    ->where('id', $requestVehicle->id)
-                    ->update([
-                        'noted' => $request->noted,
-                        'request_date' => $request->request_date,
-                        'status' => $request->status
-                    ]);
+                ->where('id', $requestVehicle->id)
+                ->update([
+                    'name' => $request->name,
+                    'noted' => $request->noted,
+                    'request_date' => $request->request_date,
+                    'status' => $request->status
+                ]);
 
             DB::commit();
 
@@ -135,11 +184,8 @@ class RequestVehicleController extends Controller
                 'message' => 'Successfully Updated Data',
                 'url' => route('request-vehicle.index')
             ]);
-
-
-
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return response()->json([
@@ -147,19 +193,19 @@ class RequestVehicleController extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-
         }
     }
 
 
     public function remove(RequestVehicle $requestVehicle, Request $request)
     {
+
         try {
 
-            $findVehicle = RequestVehicle::find($requestVehicle->id);
+            // Temukan data request_vehicle berdasarkan ID
+            $findVehicle = RequestVehicle::findOrFail($requestVehicle->id);
 
-
+            // Hapus data request_vehicle beserta request_details yang berelasi
             $requestVehicle->delete();
 
             DB::commit();
@@ -170,7 +216,6 @@ class RequestVehicleController extends Controller
                 'message' => 'Remove Data Successfully',
                 'url' => route('request-vehicle.index')
             ]);
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -182,6 +227,4 @@ class RequestVehicleController extends Controller
             ]);
         }
     }
-
-
 }

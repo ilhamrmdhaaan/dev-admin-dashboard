@@ -57,7 +57,7 @@
         </div>
 
         <div class="nk-tb-col tb-col-md">
-            <span class="badge badge-dim badge 
+            <span class="badge badge-dim badge
             {{ $item->status == 'Approved' ? 'badge-success' : ($item->status == 'Pending' ? 'badge-warning' : ($item->status == 'Cancel' ? 'badge-danger' : '')) }} ">
                 {!! $item->status !!}
             </span>
@@ -109,13 +109,6 @@
                                         <span>Hapus Data</span>
                                     </a>
                                 </li>
-                                {{-- <li>
-                                    <a target="_blank"
-                                        href="#">
-                                        <em class="icon ni ni-printer-fill"></em>
-                                        <span>Print</span>
-                                    </a>
-                                </li> --}}
                             </ul>
                         </div>
                     </div>
@@ -134,6 +127,7 @@
         <div class="nk-tb-col tb-col-lg tb-col-md">
             <h4 class="text-center">Data Is Empty</h4>
         </div>
+        <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
