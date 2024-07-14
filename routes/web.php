@@ -52,4 +52,24 @@ Route::group(['middleware' => ['auth', 'role:|super_admin']], function () {
 });
 
 
+// ------------------- User ------------------- //
+Route::group(['middleware' => ['auth', 'role:|user']], function () {
+
+    // ------------------- Dashboard ------------------- //
+    Route::name('dashboard.')->prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+    });
+
+
+    // ------------------- Request Vehicle ------------------- //
+    Route::name('request-vehicle.')->prefix('request-vehicle')->group(function () {
+        Route::get('/', [RequestVehicleController::class, 'index'])->name('index');
+        Route::get('/fetch', [RequestVehicleController::class, 'fetch']);
+        Route::get('/show/{requestVehicle}', [RequestVehicleController::class, 'show'])->name('show');
+        Route::post('/store', [RequestVehicleController::class, 'store'])->name('store');
+        Route::put('/update/{requestVehicle}', [RequestVehicleController::class, 'update'])->name('update');
+        Route::delete('/remove/{requestVehicle}', [RequestVehicleController::class, 'remove'])->name('remove');
+    });
+});
+
 require __DIR__ . '/auth.php';
