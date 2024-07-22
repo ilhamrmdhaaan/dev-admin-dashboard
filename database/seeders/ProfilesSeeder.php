@@ -15,13 +15,16 @@ class ProfilesSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create('id_ID');
-
-        for ($i = 0; $i <= 5; $i++) {
-            Profiles::create([
-                'email' => $faker->email(),
-                'name' => $faker->name(),
-                'phone' => $faker->phoneNumber()
-            ]);
+        
+        for ($i = 0; $i <= 3; $i++) {
+            for ($j=1; $j <$i; $j++) { 
+                Profiles::create([
+                    'user_id' => $i,
+                    'email' => $faker->email(),
+                    'name' => $faker->name(),
+                    'phone' => $faker->phoneNumber()
+                ]);
+            }
         }
     }
 }

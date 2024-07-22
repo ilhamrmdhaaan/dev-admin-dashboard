@@ -12,6 +12,11 @@ class Profiles extends Model
     protected $table = 'profiles';
 
     protected $fillable = [
-        'email', 'name', 'phone'
+        'user_id', 'email', 'name', 'phone'
     ];
+
+    public function Users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

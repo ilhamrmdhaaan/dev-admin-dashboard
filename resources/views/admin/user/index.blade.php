@@ -18,7 +18,7 @@
                     {{-- Head --}}
                     <div class="nk-block-between mt-4">
                         <div class="nk-block-head-content">
-                            <a href="#" onclick="showModalCreate(`{{ route('master-request-vehicle.store') }}`)" class="btn btn-primary btn-md">
+                            <a href="#" onclick="showModalCreate(`{{ route('request-vehicle.store') }}`)" class="btn btn-primary btn-md">
                                 <em class="icon ni ni-plus"></em>
                                 <span>Add Request</span>
                             </a>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="nk-block fetch-data d-none">
-                    @includeIf('admin.master.vehicle.fetch')
+                    @includeIf('admin.user.fetch')
                     <input type="hidden" name="page" value="1" />
                 </div>
             </div>
@@ -99,15 +99,10 @@
 
 
 @push('js')
-@include('admin.master.vehicle.partials._modal_create')
-{{-- @include('admin.master.vehicle.partials._modal_create_v2') --}}
-@include('admin.master.vehicle.partials._modal_update')
+@include('admin.user.partials._modal_create')
 
 <script>
-    // const modalAllInOne = '.modal-all-in-one'
     const modalCreate = '.modal-create'
-    // const modalCreateV2 = '.modal-create-v2'
-    const modalUpdated = '.modal-update'
 
     $(document).ready(function() {
         $(".fetch-data").removeClass("d-none");
@@ -121,7 +116,7 @@
 
     ) {
         await $.get(
-                `/master-request-vehicle/fetch?page=${page}&query=${query}&status=${status}`
+                `/form-request-vehicle/fetch?page=${page}&query=${query}&status=${status}`
             )
             .done((data) => {
                 $(".loader").addClass("d-none");
@@ -185,7 +180,7 @@
             .done((response) => {
                 alertSuccess(response.message);
                 $(modalCreate).modal('hide');
-                $(modalUpdated).modal('hide');
+                // $(modalUpdated).modal('hide');
                 pindahHalaman(reloadHalaman(), 1000);
                 $(originalForm).find('.tombol-simpan').attr('disabled', true);
             })
@@ -200,28 +195,6 @@
 
 
 
-    // const showModalAllInOne = async (urlModal, urlStore) => {
-    //     event.preventDefault()
-    //     $(`${modalAllInOne} .modal-dialog`).removeClass('modal-md')
-    //     $.get(urlModal)
-    //         .done(res => {
-    //             $(`${modalAllInOne} #loading-modal`).addClass('d-none')
-    //             $(`${modalAllInOne} .modal-dialog`).addClass('modal-xl')
-    //             $(modalAllInOne).modal('show')
-    //             $(`${modalAllInOne} .modal-body`).html(res.output)
-    //             $(`${modalAllInOne} form`).attr('action', urlStore)
-    //             if (res.method == 'put') {
-    //                 $(`${modalAllInOne} form [name=_method]`).val('put')
-    //             } else {
-    //                 $(`${modalAllInOne} form [name=_method]`).val('post')
-    //             }
-    //         })
-    //         .fail((errors) => {
-    //             $(`${modalAllInOne} #loading-modal`).removeClass('d-none')
-    //             alertError()
-    //         })
-    // }
-
     // Show Modal Create
     const showModalCreate = (urlStore) => {
         event.preventDefault()
@@ -231,59 +204,5 @@
         $(`${modalCreate} [name=_method]`).val('post')
     }
 
-    // const showModalCreateV2 = (urlStoreV2) => {
-    //     event.preventDefault()
-    //     $(modalCreateV2).modal('show')
-    //     $('.modal-title').text('Form Add Request')
-    //     $(`${modalCreateV2} form`).attr('action', urlStoreV2)
-    //     $(`${modalCreateV2} [name=_method]`).val('post')
-    // }
-
-    // Show Modal Updated
-    const showModalUpdated = (url, urlUpdate) => {
-        event.preventDefault()
-        $.get(url)
-            .done(response => {
-                resetForm(`${modalUpdated} form`)
-                $(modalUpdated).modal('show')
-                $(`${modalUpdated} .modal-title`).text("Form Update Request")
-                loopForm(response.data)
-                $(`${modalUpdated} form`).attr('action', urlUpdate)
-                $(`${modalUpdated} [name=_method]`).val('put')
-            })
-            .fail(errors => {
-                alertError();
-                return;
-            });
-
-    }
-
-
-    // Remove Request
-    const removeRequest = (url) => {
-        event.preventDefault();
-        Swal.fire({
-            title: "Apakah anda yakin menghapus data ini?",
-            text: "Data yang sudah dihapus tidak dapat dikembalikan lagi!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, Hapus!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.post({
-                        url: url,
-                        data: {
-                            _method: "DELETE",
-                        },
-                    })
-                    .done(response => {
-                        alertSuccess(response.message)
-                        pindahHalaman(response.url, 1500)
-                    })
-            }
-        })
-    }
 </script>
 @endpush

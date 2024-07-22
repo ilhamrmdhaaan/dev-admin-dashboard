@@ -3,12 +3,13 @@
         <div class="nk-sidebar-brand">
             <a href="#" class="logo-link nk-sidebar-logo">
 
-                <img class="logo-light logo-img" src="{{ asset('frontend/images/logo.png')}}" srcset="./images/logo2x.png 2x" alt="logo">
+                <img class="logo-light logo-img" src="{{ asset('frontend/images/logo.png') }}" srcset="{{ asset('frontend/images/logo2x.png 2x') }}" alt="logo">
 
-                <img class="logo-dark logo-img" src="{{ asset('frontend/images/logo-dark.png')}}" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                <img class="logo-dark logo-img" src="{{ asset('frontend/images/logo-dark.png')}}" srcset="{{ asset('frontend/images/logo-dark2x.png 2x') }}" alt="logo-dark">
 
                 <img class="logo-small logo-img logo-img-small" src="
-                {{asset('frontend/images/logo-small.png')}}" srcset="./images/logo-small2x.png 2x" alt="logo-small">
+                {{ asset('frontend/images/logo-small.png') }}" 
+                 srcset="{{ asset('frontend/images/logo-small2x.png 2x') }}" alt="logo-small">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">
@@ -40,7 +41,7 @@
                         </li>
 
                         <li class="nk-menu-item">
-                            <a href="{{ route('request-vehicle.index') }}" class="nk-menu-link">
+                            <a href="{{ route('master-request-vehicle.index') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon">
                                     <em class="icon ni ni-tranx-fill"></em>
                                 </span>
@@ -51,7 +52,7 @@
                         </li>
 
                         <li class="nk-menu-item">
-                            <a href="{{ route('request-details.index') }}" class="nk-menu-link">
+                            <a href="{{ route('master-request-details.index') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon">
                                     <em class="icon ni ni-clipboad-check-fill"></em>
                                 </span>
@@ -89,7 +90,6 @@
                                 </li>
                             </ul>
                         </li> --}}
-
                     @endrole
 
                     @role('user')

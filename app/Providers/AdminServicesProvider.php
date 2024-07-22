@@ -9,6 +9,9 @@ use App\Interfaces\RequestDetails\RequestDetailsInterface;
 use App\Interfaces\RequestVehicle\RequestVehicleInterface;
 use App\Repositories\RequestDetails\RequestDetailsRepository;
 use App\Repositories\RequestVehicle\RequestVehicleRepository;
+use App\Interfaces\FormRequestVehicle\FormRequestVehicleInterface;
+use App\Repositories\FormRequestVehicle\FormRequestVehicleRepository;
+
 
 class AdminServicesProvider extends ServiceProvider
 {
@@ -24,6 +27,10 @@ class AdminServicesProvider extends ServiceProvider
         $this->app->bind(
             RequestDetailsInterface::class,
             RequestDetailsRepository::class
+        );
+        $this->app->bind(
+            FormRequestVehicleInterface::class,
+            FormRequestVehicleRepository::class
         );
         $this->app->bind(
             DashboardInterface::class,

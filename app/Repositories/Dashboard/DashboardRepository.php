@@ -43,6 +43,7 @@ class DashboardRepository implements DashboardInterface
     public function totalStatusCancel()
     {
         $totalStatus = DB::table('request_vehicle as r')
+            // ->leftJoin('request_details as d', 'r.id', '=', 'd.request_vehicle_id')
             ->select('r.id')
             ->where('r.status', '=', 'Cancel')
             ->whereDate('r.created_at', now())

@@ -44,4 +44,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+        // Specify the primary key if it's not 'id'
+        protected $primaryKey = 'id';
+
+        // Define the inverse relationship to Vehicle
+        public function profiles()
+        {
+            return $this->belongsTo(RequestVehicle::class, 'id');
+        }
 }

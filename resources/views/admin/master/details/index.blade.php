@@ -22,7 +22,7 @@
                                     data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li>
+                                        {{-- <li>
                                             <div class="drodown">
                                                 <a href="#"
                                                     class="dropdown-toggle dropdown-indicator btn btn-outline-light btn-success text-dark"
@@ -32,7 +32,7 @@
                                                     <ul class="link-list-opt no-bdr">
                                                         <li>
                                                             <a href="#"
-                                                                onclick="showModalCreateBarang(`{{ route('request-details.store') }}`)">
+                                                                onclick="showModalCreateBarang(`{{ route('master-request-details.store') }}`)">
                                                                 <em class="icon ni ni-plus"></em>
                                                                 Satu Persatu
                                                                 </span>
@@ -41,7 +41,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </div>

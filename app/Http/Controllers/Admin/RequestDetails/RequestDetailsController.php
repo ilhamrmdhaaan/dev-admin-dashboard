@@ -83,7 +83,7 @@ class RequestDetailsController extends Controller
                 'status_code' => 200,
                 'status' => 'success',
                 'message' => 'Successfully Insert Data',
-                'url' => route('request-details.index')
+                'url' => route('master-request-details.index')
             ]);
 
         } catch (\Exception $e) {

@@ -12,11 +12,13 @@ class RequestVehicle extends Model
     protected $table = 'request_vehicle';
 
     protected $fillable = [
-        'email', 'request_date', 'maximum_person', 'division', 'direction', 'status', 'necessity'
+        'profile_id', 'email', 'request_date', 'maximum_person', 'division', 'direction', 'status', 'necessity'
     ];
 
     public function requestDetails()
     {
         return $this->hasMany(RequestDetails::class);
     }
+
+
 }

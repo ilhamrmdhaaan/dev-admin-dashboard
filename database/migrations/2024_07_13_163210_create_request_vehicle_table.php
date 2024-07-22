@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('request_vehicle', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
             $table->string('email')->nullable();
             $table->date('request_date')->nullable();
             $table->string('maximum_person')->nullable();
@@ -29,6 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('request_vehicle');
+        Schema::enableForeignKeyConstraints();
+
     }
 };

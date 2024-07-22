@@ -271,8 +271,10 @@
                                     <em class="icon ni ni-user-alt"></em>
                                 </div>
                                 <div class="user-info d-none d-xl-block">
+                                    <div class="user-name dropdown-indicator">
+                                        {{ auth()->user()->name }}
+                                    </div>
                                     <div class="user-status user-status-unverified">Unverified</div>
-                                    <div class="user-name dropdown-indicator">Abu Bin Ishityak</div>
                                 </div>
                             </div>
                         </a>
@@ -284,8 +286,8 @@
                                         <span>AB</span>
                                     </div>
                                     <div class="user-info">
-                                        <span class="lead-text">Abu Bin Ishtiyak</span>
-                                        <span class="sub-text">info@softnio.com</span>
+                                        <span class="lead-text">{{ auth()->user()->name }}</span>
+                                        <span class="sub-text">{{ auth()->user()->email }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -264,4 +264,66 @@
         })
     }
 </script>
-@end
+@endpush
+
+
+
+ public function show(RequestVehicle $requestVehicle)
+    {
+
+        $data = RequestVehicle::select([
+            'request_vehicle.id',
+            'request_vehicle.email',
+            'request_vehicle.request_date',
+            'request_vehicle.maximum_person',
+            'request_vehicle.division',
+            'request_vehicle.direction',
+            'request_vehicle.necessity',
+            'request_vehicle.status',
+
+        ])
+            ->where('request_vehicle.id', $requestVehicle->id)
+            ->first();
+
+
+        return response()->json([
+            'data' => $data
+        ], 200);
+    }
+
+
+       // public function storeV2(Request $request) {
+    //     $attr = $request->all();
+    //     // dd($request->all());
+
+    //     try {
+
+    //         $data = new RequestVehicle();
+    //         $data['email'] = $request->email;
+    //         $data['request_date'] = $request->request_date;
+    //         $data['maximum_person'] = $request->maximum_person;
+    //         $data['division'] = $request->division;
+    //         $data['direction'] = $request->direction;
+    //         $data['necessity'] = $request->necessity;
+    //         $data['status'] = "Pending";
+    //         $data->save();
+
+    //         // Data untuk tabel request_details
+    //         $requestDetailsData = RequestDetails::create([
+    //             'request_vehicle_id' => $data->id,
+    //             'request_date' => $request->request_date,
+    //             'noted' => $request->noted
+    //         ]);
+
+    //         // dd($requestDetailsData);
+
+    //         DB::commit();
+
+            
+    //     } catch (\Exception $e) {
+
+    //         DB::rollBack();
+
+    //         return $e;
+    //     }
+    // }

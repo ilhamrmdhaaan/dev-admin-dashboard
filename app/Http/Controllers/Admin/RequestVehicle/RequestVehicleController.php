@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin\RequestVehicle;
 
+use App\Models\Profiles;
 use Illuminate\Http\Request;
+use App\Models\RequestDetails;
 use App\Models\RequestVehicle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Interfaces\RequestVehicle\RequestVehicleInterface;
-use App\Models\RequestDetails;
 
 class RequestVehicleController extends Controller
 {
@@ -52,7 +54,7 @@ class RequestVehicleController extends Controller
             $badge = $this->badge();
             $status = $request->get('status');
 
-            $data = $this->vehicleRepository->getVehicle()
+            $data = $this->vehicleRepository->getAll()
                 ->when($q ?? false, function ($query) use ($q) {
                     return $query->where('v.id', 'like', '%' . $q . '%')
                         ->orWhere('v.email', 'like', '%' . $q . '%');
@@ -74,39 +76,50 @@ class RequestVehicleController extends Controller
             return $data;
         }
     }
-
+    
 
     public function show(RequestVehicle $requestVehicle)
     {
+        $title = 'Form Updated Request';
 
-        $data = RequestVehicle::select([
-            'request_vehicle.id',
-            'request_vehicle.email',
-            'request_vehicle.request_date',
-            'request_vehicle.maximum_person',
-            'request_vehicle.division',
-            'request_vehicle.direction',
-            'request_vehicle.necessity',
-            'request_vehicle.status',
+        $data = DB::table('request_vehicle as v')
+                ->leftJoin('request_details as d', 'v.id', '=' ,'d.request_vehicle_id')
+                ->selectRaw('
+                    v.id as r_vehicle_id, d.id as r_details_id, v.profile_id, 
+                    d.request_vehicle_id, v.request_date, d.name, v.email, v.maximum_person, 
+                    v.division, v.direction, v.necessity, v.status, d.noted
+                ')
+                ->where('v.id', $requestVehicle->id)
+                ->first();
 
-        ])
-            ->where('request_vehicle.id', $requestVehicle->id)
-            ->first();
+        $findDivision = $this->division();
 
+        // return $data;
 
-        return response()->json([
-            'data' => $data
-        ], 200);
+        return view('admin.master.vehicle.update', compact(
+            'title',
+            'data',
+            'findDivision'
+        ));
+        
     }
+
+   
 
 
     public function store(Request $request)
     {
         $attr = $request->all();
+        // dd($request->all());
 
         try {
+            $userId = Auth::user();
+
+            // Mencari profile_id berdasarkan user_id
+            $findProfile = Profiles::where('id', $userId->id)->first();
 
             $data = new RequestVehicle();
+            $data['profile_id'] = $findProfile->id;
             $data['email'] = $request->email;
             $data['request_date'] = $request->request_date;
             $data['maximum_person'] = $request->maximum_person;
@@ -133,6 +146,7 @@ class RequestVehicleController extends Controller
                 'message' => 'Successfully Add Data',
                 'url' => route('request-vehicle.index')
             ]);
+            
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -145,17 +159,22 @@ class RequestVehicleController extends Controller
         }
     }
 
+ 
 
-    public function update(RequestVehicle $requestVehicle, Request $request)
+    public function updated(Request $request, $id)
     {
 
         $attr = $request->all();
+        // dd($request->all());
 
         try {
+            $findVehicle = RequestVehicle::findOrFail($id);
+            $findDetails = RequestDetails::findOrFail($id);
+            $findProfile = Profiles::findOrFail($id);
+            // dd($findProfile);
 
-            $findDetails['request_vehicle_id'] = RequestDetails::find($requestVehicle->id);
-
-            $requestVehicle->update([
+            $findVehicle->update([
+                'profile_id' => $findProfile->id,
                 'email' => $attr['email'],
                 'request_date' => $attr['request_date'],
                 'maximum_person' => $attr['maximum_person'],
@@ -168,10 +187,12 @@ class RequestVehicleController extends Controller
 
 
             $updatedRequestVehicle = DB::table('request_details')
-                ->where('id', $requestVehicle->id)
+                ->where('id', $findDetails->id)
                 ->update([
                     'name' => $request->name,
                     'noted' => $request->noted,
+                    'nopol' => $request->nopol,
+                    'driver' => $request->driver,
                     'request_date' => $request->request_date,
                     'status' => $request->status
                 ]);
@@ -182,7 +203,7 @@ class RequestVehicleController extends Controller
                 'status_code' => 200,
                 'status' => 'success',
                 'message' => 'Successfully Updated Data',
-                'url' => route('request-vehicle.index')
+                'url' => route('master-request-vehicle.index')
             ]);
         } catch (\Exception $e) {
 
@@ -214,7 +235,7 @@ class RequestVehicleController extends Controller
                 'status_code' => 200,
                 'status' => 'success',
                 'message' => 'Remove Data Successfully',
-                'url' => route('request-vehicle.index')
+                'url' => route('master-request-vehicle.index')
             ]);
         } catch (\Exception $e) {
 
@@ -227,4 +248,5 @@ class RequestVehicleController extends Controller
             ]);
         }
     }
+
 }

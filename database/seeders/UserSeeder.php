@@ -53,7 +53,27 @@ class UserSeeder extends Seeder
                     'password' => bcrypt('admin')
                 ]);
                 $role = 'user';
-                $permission = ['create', 'read', 'update', 'delete'];
+                $permission = ['create', 'read'];
+                $user->assignRole([$role]);
+                $user->givePermissionTo([$permission]);
+                $role = Role::find(2);
+                $role->givePermissionTo([$permission]);
+            }
+
+            /** USER **/
+            $users = [
+                ['UserTestingFinance', 'user_finance', 'user_finance@mail.com'],
+            ];
+    
+            foreach ($users as $user) {
+                $user = User::create([
+                    'name' => $user[0],
+                    'username' => $user[1],
+                    'email' => $user[2],
+                    'password' => bcrypt('admin')
+                ]);
+                $role = 'user';
+                $permission = ['create', 'read'];
                 $user->assignRole([$role]);
                 $user->givePermissionTo([$permission]);
                 $role = Role::find(2);

@@ -96,23 +96,10 @@
                                 class="icon ni ni-more-h"></em></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
-                                {{-- <li>
-                                    <a href="#" onclick="showModalUpdated(`{{ route('master-request-vehicle.show', $item->r_vehicle_id) }}`, `{{ route('master-request-vehicle.update', $item->r_vehicle_id) }}`)">
-                                        <em class="icon ni ni-update"></em>
-                                        <span>Update Data</span>
-                                    </a>
-                                </li> --}}
                                 <li>
-                                    <a href="{{ route('master-request-vehicle.show', $item->r_vehicle_id) }}">
-                                        <em class="icon ni ni-update"></em>
-                                        <span>Update Data</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        onclick="removeRequest(` {{ route('master-request-vehicle.remove', $item->r_vehicle_id) }} `)">
-                                        <em class="icon ni ni-trash"></em>
-                                        <span>Hapus Data</span>
+                                    <a href="#" onclick="showModalUpdated()">
+                                        <em class="icon ni ni-eye"></em>
+                                        <span>View Data</span>
                                     </a>
                                 </li>
                             </ul>
