@@ -9,6 +9,7 @@ use App\Models\RequestDetails;
 use App\Models\RequestVehicle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VehicleRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\FormRequestVehicle\FormRequestVehicleInterface;
 
@@ -85,16 +86,13 @@ class FormRequestVehicleController extends Controller
     //     ));
     // }
 
-    public function store(Request $request) {
+    public function store(VehicleRequest $request) {
         $attr = $request->all();
-        // dd($request->all());
 
         try {
           
-            $userId = Auth::user();
 
-            // Mencari profile_id berdasarkan user_id
-            $findProfile = Profiles::where('id', $userId->id)->first();
+            $findProfile = Profiles::where('email', $request->email)->first();
             // dd($findProfile);
             
             $data = new RequestVehicle();
@@ -112,19 +110,29 @@ class FormRequestVehicleController extends Controller
             $requestDetailsData = RequestDetails::create([
                 'request_vehicle_id' => $data->id,
                 'request_date' => $request->request_date,
+                'status' => "Pending",
                 'noted' => $request->noted
             ]);
 
-            // dd($requestDetailsData);
 
             DB::commit();
 
+            return response()->json([
+                'status_code' => 200,
+                'status' => 'success',
+                'message' => 'Successfully Add Data',
+                'url' => route('request-vehicle.index')
+            ]);
             
         } catch (\Exception $e) {
 
             DB::rollBack();
 
-            return $e;
+            return response()->json([
+                'status_code' => 400,
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
         }
     }
 }

@@ -7,12 +7,12 @@
         <div class="nk-tb-col"><span class="sub-text">Division</span></div>
         <div class="nk-tb-col"><span class="sub-text">Direction(Tujuan)</span></div>
         <div class="nk-tb-col"><span class="sub-text">Necessity(Keperluan)</span></div>
-
+        <div class="nk-tb-col"><span class="sub-text">Driver</span></div>
+        <div class="nk-tb-col"><span class="sub-text">License Number</span></div>
         <div class="nk-tb-col"><span class="sub-text">Noted</span></div>
-
         <div class="nk-tb-col"><span class="sub-text">Status</span></div>
-
         <div class="nk-tb-col"><span class="sub-text">Opsi</span></div>
+
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
         <div class="nk-tb-col"></div>
@@ -50,6 +50,14 @@
 
         <div class="nk-tb-col">
             <span class="tb-lead text-capitalize">{!!  $item->necessity !!}</span>
+        </div>
+
+        <div class="nk-tb-col">
+            <span class="tb-lead text-capitalize">{!!  $item->driver !!}</span>
+        </div>
+
+        <div class="nk-tb-col">
+            <span class="tb-lead text-capitalize">{!!  $item->nopol !!}</span>
         </div>
 
         <div class="nk-tb-col">

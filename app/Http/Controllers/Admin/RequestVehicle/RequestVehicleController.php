@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\RequestVehicle;
 
+use App\Models\User;
 use App\Models\Profiles;
 use Illuminate\Http\Request;
 use App\Models\RequestDetails;
@@ -9,6 +10,7 @@ use App\Models\RequestVehicle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\VehicleRequest;
 use App\Interfaces\RequestVehicle\RequestVehicleInterface;
 
 class RequestVehicleController extends Controller
@@ -87,7 +89,8 @@ class RequestVehicleController extends Controller
                 ->selectRaw('
                     v.id as r_vehicle_id, d.id as r_details_id, v.profile_id, 
                     d.request_vehicle_id, v.request_date, d.name, v.email, v.maximum_person, 
-                    v.division, v.direction, v.necessity, v.status, d.noted
+                    v.division, v.direction, v.necessity, v.status, d.noted, d.nopol, d.driver,
+                    d.status
                 ')
                 ->where('v.id', $requestVehicle->id)
                 ->first();
@@ -107,45 +110,52 @@ class RequestVehicleController extends Controller
    
 
 
-    public function store(Request $request)
+    public function store(VehicleRequest $request)
     {
         $attr = $request->all();
-        // dd($request->all());
 
         try {
-            $userId = Auth::user();
+        
+            $findProfiles = Profiles::where('email', $request->email)->first();
 
-            // Mencari profile_id berdasarkan user_id
-            $findProfile = Profiles::where('id', $userId->id)->first();
+            if (!$findProfiles) {
+                return response()->json([
+                    'status_code' => 400,
+                    'status' => 'Failed',
+                    'message' => 'User Not Found'
+                ]);
 
-            $data = new RequestVehicle();
-            $data['profile_id'] = $findProfile->id;
-            $data['email'] = $request->email;
-            $data['request_date'] = $request->request_date;
-            $data['maximum_person'] = $request->maximum_person;
-            $data['division'] = $request->division;
-            $data['direction'] = $request->direction;
-            $data['necessity'] = $request->necessity;
-            $data['status'] = $request->status;
-            $data->save();
+            } else {
 
-            // Data untuk tabel request_details
-            $requestDetailsData = RequestDetails::create([
-                'request_vehicle_id' => $data->id,
-                'request_date' => $request->request_date,
-                'noted' => $request->noted
-            ]);
-
-            // dd($requestDetailsData);
-
-            DB::commit();
-
-            return response()->json([
-                'status_code' => 200,
-                'status' => 'success',
-                'message' => 'Successfully Add Data',
-                'url' => route('request-vehicle.index')
-            ]);
+                $data = new RequestVehicle();
+                $data['profile_id'] = $findProfiles->id;
+                $data['email'] = $request->email;
+                $data['request_date'] = $request->request_date;
+                $data['maximum_person'] = $request->maximum_person;
+                $data['division'] = $request->division;
+                $data['direction'] = $request->direction;
+                $data['necessity'] = $request->necessity;
+                $data['status'] = $request->status;
+                $data->save();
+    
+                // Data untuk tabel request_details
+                $requestDetailsData = RequestDetails::create([
+                    'request_vehicle_id' => $data->id,
+                    'request_date' => $request->request_date,
+                    'status' => $request->status,
+                    'noted' => $request->noted
+                ]);
+    
+                
+                DB::commit();
+    
+                return response()->json([
+                    'status_code' => 200,
+                    'status' => 'success',
+                    'message' => 'Successfully Add Data',
+                    'url' => route('master-request-vehicle.index')
+                ]);
+            }
             
         } catch (\Exception $e) {
 
@@ -165,50 +175,64 @@ class RequestVehicleController extends Controller
     {
 
         $attr = $request->all();
-        // dd($request->all());
+        // dd($attr);
 
         try {
+
             $findVehicle = RequestVehicle::findOrFail($id);
             $findDetails = RequestDetails::findOrFail($id);
-            $findProfile = Profiles::findOrFail($id);
-            // dd($findProfile);
+            $findProfiles = Profiles::where('email', $request->email)->first();
 
-            $findVehicle->update([
-                'profile_id' => $findProfile->id,
-                'email' => $attr['email'],
-                'request_date' => $attr['request_date'],
-                'maximum_person' => $attr['maximum_person'],
-                'division' => $attr['division'],
-                'direction' => $attr['direction'],
-                'necessity' => $attr['necessity'],
-                'status' => $attr['status'],
-            ]);
-
-
-
-            $updatedRequestVehicle = DB::table('request_details')
-                ->where('id', $findDetails->id)
-                ->update([
-                    'name' => $request->name,
-                    'noted' => $request->noted,
-                    'nopol' => $request->nopol,
-                    'driver' => $request->driver,
-                    'request_date' => $request->request_date,
-                    'status' => $request->status
+            
+            if (!$findProfiles) {
+                return response()->json([
+                    'status_code' => 400,
+                    'failed' => 'Failed',
+                    'message' => 'Email Not Found'
                 ]);
 
-            DB::commit();
+            } else {
+               
 
-            return response()->json([
-                'status_code' => 200,
-                'status' => 'success',
-                'message' => 'Successfully Updated Data',
-                'url' => route('master-request-vehicle.index')
-            ]);
+                $findVehicle->update([
+                    'profile_id' => $findProfiles->id,
+                    'email' => $attr['email'],
+                    'request_date' => $attr['request_date'],
+                    'maximum_person' => $attr['maximum_person'],
+                    'division' => $attr['division'],
+                    'direction' => $attr['direction'],
+                    'necessity' => $attr['necessity'],
+                    'status' => $attr['status'],
+                ]);
+    
+    
+    
+                $updatedRequestVehicle = DB::table('request_details')
+                    ->where('id', $findDetails->id)
+                    ->update([
+                        'name' => $request->name,
+                        'noted' => $request->noted,
+                        'nopol' => $request->nopol,
+                        'driver' => $request->driver,
+                        'request_date' => $request->request_date,
+                        'status' => $request->status
+                    ]);
+    
+                DB::commit();
+    
+                return response()->json([
+                    'status_code' => 200,
+                    'status' => 'success',
+                    'message' => 'Successfully Updated Data',
+                    'url' => route('master-request-vehicle.index')
+                ]);
+            }
+            
+
         } catch (\Exception $e) {
 
             DB::rollBack();
-
+            
             return response()->json([
                 'status_code' => 400,
                 'status' => 'error',

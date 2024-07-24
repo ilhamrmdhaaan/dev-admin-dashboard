@@ -327,3 +327,9 @@
     //         return $e;
     //     }
     // }
+
+
+
+ @foreach ($division as $item)
+    <option value="{{ $item->id }}" {{ old('name', $item->name) == "Finance" ? ' selected' : '' }}> {{ $item->name }}</option>
+  @endforeach

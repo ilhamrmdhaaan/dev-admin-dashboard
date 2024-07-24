@@ -12,7 +12,7 @@ class RequestDetails extends Model
     protected $table = 'request_details';
 
     protected $fillable = [
-        'request_vehicle_id', 'name', 'request_date', 'noted', 'nopol', 'driver'
+        'request_vehicle_id', 'name', 'request_date', 'noted', 'nopol', 'driver', 'status'
     ];
 
     // Specify the primary key if it's not 'id'

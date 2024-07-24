@@ -79,5 +79,25 @@ class UserSeeder extends Seeder
                 $role = Role::find(2);
                 $role->givePermissionTo([$permission]);
             }
+
+            /** USER **/
+            $users = [
+                ['UserTestingIT', 'user_IT', 'user_IT@mail.com'],
+            ];
+    
+            foreach ($users as $user) {
+                $user = User::create([
+                    'name' => $user[0],
+                    'username' => $user[1],
+                    'email' => $user[2],
+                    'password' => bcrypt('admin')
+                ]);
+                $role = 'user';
+                $permission = ['create', 'read'];
+                $user->assignRole([$role]);
+                $user->givePermissionTo([$permission]);
+                $role = Role::find(2);
+                $role->givePermissionTo([$permission]);
+            }
     }
 }

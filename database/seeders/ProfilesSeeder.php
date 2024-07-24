@@ -16,7 +16,7 @@ class ProfilesSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
         
-        for ($i = 0; $i <= 3; $i++) {
+        for ($i = 0; $i <= 4; $i++) {
             for ($j=1; $j <$i; $j++) { 
                 Profiles::create([
                     'user_id' => $i,

@@ -48,9 +48,13 @@ class User extends Authenticatable
         // Specify the primary key if it's not 'id'
         protected $primaryKey = 'id';
 
-        // Define the inverse relationship to Vehicle
-        public function profiles()
-        {
-            return $this->belongsTo(RequestVehicle::class, 'id');
+        // // Define the inverse relationship to Vehicle
+        // public function profiles()
+        // {
+        //     return $this->belongsTo(RequestVehicle::class, 'id');
+        // }
+
+        public function profile() {
+            return $this->hasOne(Profiles::class);
         }
 }

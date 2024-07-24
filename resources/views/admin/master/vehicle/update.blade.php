@@ -111,21 +111,19 @@
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <div class="form-control-wrap">
-                                                    <select class="form-select" name="division" style="position:absolute;" data-placeholder="Chose Division" >
+                                                    <select class="form-select" name="division" id=division style="position:absolute;" data-placeholder="Chose Division">
                                                         <option label="Chose Data" disabled selected value=""></option>
-                                                        {{-- @foreach ($findDivision as $item)
-                                                        <option value="{{ $item->name }}">
-                                                            {{ $item->name }}
-                                                        </option>
+                                                    
+                                                    
 
-                                                        <option value="{{ $item->id }}" {{ ( $item->name == $item->name) ? 'selected' : '' }}> {{ $item->name }} 
-                                                        </option>
-                                                        @endforeach --}}
-                                                        <option value="Finance">Finance</option>
-                                                        <option value="IT">IT</option>
-                                                        <option value="Legal">Legal</option>
-                                                        <option value="Marketing">Marketing</option>
-                                                        <option value="Operasional">Operasional</option>
+                                                        <option value="Finance" {{ $data->division == "Finance" ? 'selected' : '' }}>Finance</option>
+                                                        <option value="IT"  {{ $data->division =="IT" ? 'selected' : '' }}>IT</option>
+                                                        <option value="Legal"  {{ $data->division =="Legal" ? 'selected' : '' }}>Legal</option>
+                                                        <option value="Marketing"  {{ $data->division =="Marketing" ? 'selected' : '' }}>Marketing</option>
+                                                        <option value="Operasional"  {{ $data->division =="Operasional" ? 'selected' : '' }}>Operasional</option>
+
+                                                   
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -162,9 +160,9 @@
                                                     <select class="form-select" name="status" style="position:absolute;"
                                                     data-placeholder="Chose Division">
                                                     <option label="Chose Status" disabled selected value=""></option>
-                                                    <option value="Approved">Approved</option>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Cancel">Cancel</option>
+                                                    <option value="Approved"  {{ $data->status == "Approved" ? 'selected' : '' }} >Approved</option>
+                                                    <option value="Pending"  {{ $data->status == "Pending" ? 'selected' : '' }}>Pending</option>
+                                                    <option value="Cancel"  {{ $data->status == "Cancel" ? 'selected' : '' }}>Cancel</option>
                                                     </option>
                                                 </select>
                                                 </div>
@@ -178,7 +176,7 @@
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" name="nopol">
+                                                    <input type="text" class="form-control" name="nopol" value="{{ $data->nopol }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -189,7 +187,7 @@
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" name="driver">
+                                                    <input type="text" class="form-control" name="driver" value="{{ $data->driver }}">
                                                 </div>
                                             </div>
                                         </div>

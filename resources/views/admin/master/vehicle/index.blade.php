@@ -185,8 +185,8 @@
             .done((response) => {
                 alertSuccess(response.message);
                 $(modalCreate).modal('hide');
-                $(modalUpdated).modal('hide');
-                pindahHalaman(reloadHalaman(), 1000);
+                // $(modalUpdated).modal('hide');
+                // pindahHalaman(reloadHalaman(), 1000);
                 $(originalForm).find('.tombol-simpan').attr('disabled', true);
             })
             .fail((errors) => {

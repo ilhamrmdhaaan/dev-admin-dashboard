@@ -17,6 +17,10 @@ class Profiles extends Model
 
     public function Users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function requestVehicles() {
+        return $this->hasOne(RequestVehicle::class);
     }
 }
