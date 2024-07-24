@@ -12,4 +12,5 @@
  1. git clone https://github.com/ilhamrmdhaaan/dev-admin-dashboard.git
  2. Sesuaikan dengan version php version di device masing-masing
  3. Selanjutnya composer install
- 4. Kemudian ketik php artisan cp .env.example .cp
+ 4. Selanjutnya npm install 
+ 5. Kemudian ketik php artisan cp .env.example .cp
