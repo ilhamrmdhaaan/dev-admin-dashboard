@@ -113,21 +113,20 @@ class RequestVehicleController extends Controller
     public function store(VehicleRequest $request)
     {
         $attr = $request->all();
-
-        try {
         
-            $findProfiles = Profiles::where('email', $request->email)->first();
-
+        $findProfiles = Profiles::where('email', $request->email)->first();
+        
             if (!$findProfiles) {
                 return response()->json([
-                    'status_code' => 400,
-                    'status' => 'Failed',
                     'message' => 'User Not Found'
                 ]);
 
-            } else {
+            } 
 
-                $data = new RequestVehicle();
+        try {
+        
+
+            $data = new RequestVehicle();
                 $data['profile_id'] = $findProfiles->id;
                 $data['email'] = $request->email;
                 $data['request_date'] = $request->request_date;
@@ -155,7 +154,6 @@ class RequestVehicleController extends Controller
                     'message' => 'Successfully Add Data',
                     'url' => route('master-request-vehicle.index')
                 ]);
-            }
             
         } catch (\Exception $e) {
 

@@ -183,10 +183,10 @@
                 }
             })
             .done((response) => {
-                alertSuccess(response.message);
                 $(modalCreate).modal('hide');
                 // $(modalUpdated).modal('hide');
                 // pindahHalaman(reloadHalaman(), 1000);
+                alertSuccess(response.message);
                 $(originalForm).find('.tombol-simpan').attr('disabled', true);
             })
             .fail((errors) => {
@@ -197,6 +197,7 @@
                 alertError();
             });
     }
+    
 
 
 
